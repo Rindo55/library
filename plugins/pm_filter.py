@@ -1419,6 +1419,8 @@ async def auto_filter(client, msg, spoll=False):
             url=imdb['url'],
             **locals()
         )
+    for file in files:
+        segs = f"🔖{get_size(file.file_size)}🔮{file.file_name} - {file.file_id}" 
     else:
         cap = f"👋 𝖧𝖾𝗒 {message.from_user.mention}\n📁 𝖸𝗈𝗎𝗋 𝖥𝗂𝗅𝖾𝗌 𝖠𝗋𝖾 𝖱𝖾𝖺𝖽𝗒\n\n♨️ 𝖯𝗈𝗐𝖾𝗋𝖾𝖽b\n{segs}"
     if imdb and imdb.get('poster'):
