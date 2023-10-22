@@ -83,6 +83,7 @@ async def next_page(bot, query):
     print(BUTTONS)
     print(key)
     print(offset)
+    print(req)
     if not search:
         await query.answer(script.OLD_ALRT_TXT.format(query.from_user.first_name),show_alert=True)
         return
@@ -189,6 +190,7 @@ async def next_page(bot, query):
             else:
                 off_set = offset - int(MAX_B_TN)
             if n_offset == 0:
+                
                 btn.append(
                     [InlineKeyboardButton("◀️ 𝖡𝖠𝖢𝖪", callback_data=f"next_{req}_{key}_{off_set}"), InlineKeyboardButton(f"{math.ceil(int(offset)/int(MAX_B_TN))+1} / {math.ceil(total/int(MAX_B_TN))}", callback_data="pages")]
                 )
