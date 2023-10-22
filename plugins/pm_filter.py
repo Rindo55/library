@@ -34,6 +34,7 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.ERROR)
 
 BUTTONS = {}
+CAPTIONS = {}
 SPELL_CHECK = {}
 
 
@@ -97,8 +98,6 @@ async def next_page(bot, query):
     settings = await get_settings(query.message.chat.id)
     pre = 'filep' if settings['file_secure'] else 'file'
     temp.FILES_IDS[key] = files
-    for file in files:
-        segs = f"🔖{get_size(file.file_size)}🔮{file.file_name} - {file.file_id}" 
     if settings['button']:
         btn = [
             [
@@ -108,6 +107,8 @@ async def next_page(bot, query):
             ]
             for file in files
         ]
+        segs = [f"[🔖{get_size(file.file_size)} - {file.file_name}](https://t.me/anime_data_bot?start=file_{file.file_id})" for file in files]
+        segs1 = "\n\n".join(segs)
     else:
         btn = [
             [
@@ -1299,7 +1300,7 @@ async def auto_filter(client, msg, spoll=False):
         btn = [
             [
                 InlineKeyboardButton(
-                    text=f"🔖{get_size(file.file_size)}🔮{file.file_name}", callback_data=f'{pre}#{file.file_id}'
+                    text=f"{get_size(file.file_size)}🔮{file.file_name}", callback_data=f'{pre}#{file.file_id}'
                 ),
             ]
             for file in files
@@ -1425,8 +1426,6 @@ async def auto_filter(client, msg, spoll=False):
         )
 
     else:
-        segs = [f"[🔖{get_size(file.file_size)} - {file.file_name}](https://t.me/anime_data_bot?start=file_{file.file_id})" for file in files]
-        segs1 = "\n\n".join(segs)
         cap = f"👋 𝖧𝖾𝗒 {message.from_user.mention}\n\n📁 𝖸𝗈𝗎𝗋 𝖥𝗂𝗅𝖾𝗌 𝖠𝗋𝖾 𝖱𝖾𝖺𝖽𝗒\n\n{segs1}"
     if imdb and imdb.get('poster'):
         try:
