@@ -108,7 +108,7 @@ async def next_page(bot, query):
             ]
             for file in files
         ]
-        segs = [f"[🔖{get_size(file.file_size)} - {file.file_name}](https://t.me/anime_data_bot?start=file_{file.file_id})" for file in files]
+        segs = [f"[🔖{get_size(file.file_size)} --- {file.file_name}](https://t.me/anime_data_bot?start=file_{file.file_id})" for file in files]
         segs1 = "\n\n".join(segs)
     else:
         btn = [
@@ -256,6 +256,7 @@ async def next_page(bot, query):
         InlineKeyboardButton("📤 𝖲𝖾𝗇𝖽 𝖠𝗅𝗅 𝖥𝗂𝗅𝖾𝗌 📤", callback_data=f"send_all#{req}#{key}#{pre}")
     ])
     try:
+        await query.edit_message_caption(segs1)
         await query.edit_message_reply_markup(
             reply_markup=InlineKeyboardMarkup(btn)
         )
