@@ -1421,8 +1421,8 @@ async def auto_filter(client, msg, spoll=False):
         )
 
     else:
-        segs = [f"[🔖{get_size(file.file_size)} 🔮{file.file_name}](https://t.me/anime_data_bot?start=file_{file.file_id})\n\n" for file in files]
-        segs1 = segs[0:3]
+        segs = [f"🔖{get_size(file.file_size)} 🔮{file.file_name}" for file in files]
+        segs1 = "\n\n".join(segs)
         cap = f"👋 𝖧𝖾𝗒 {message.from_user.mention}\n📁 𝖸𝗈𝗎𝗋 𝖥𝗂𝗅𝖾𝗌 𝖠𝗋𝖾 𝖱𝖾𝖺𝖽𝗒\n\n{segs1}"
     if imdb and imdb.get('poster'):
         try:
