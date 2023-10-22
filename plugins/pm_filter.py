@@ -100,14 +100,7 @@ async def next_page(bot, query):
     for file in files:
         segs = f"🔖{get_size(file.file_size)}🔮{file.file_name} - {file.file_id}" 
     if settings['button']:
-        btn = [
-            [
-                InlineKeyboardButton(
-                   text=f"🔖{get_size(file.file_size)}🔮{file.file_name}", callback_data=f'{pre}#{file.file_id}'
-                ),
-            ]
-            for file in files
-        ]
+        btn = None
     else:
         btn = [
             [
