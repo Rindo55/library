@@ -93,6 +93,8 @@ async def next_page(bot, query):
     settings = await get_settings(query.message.chat.id)
     pre = 'filep' if settings['file_secure'] else 'file'
     temp.FILES_IDS[key] = files
+    for file in files:
+        segs = f"🔖{get_size(file.file_size)}🔮{file.file_name} - {file.file_id}" 
     if settings['button']:
         btn = [
             [
@@ -1289,7 +1291,6 @@ async def auto_filter(client, msg, spoll=False):
     pre = 'filep' if settings['file_secure'] else 'file'
     req = message.from_user.id if message.from_user else 0
     BUTTONS[key] = search
-    segs = f"🔖{get_size(file.file_size)}🔮{file.file_name} - {pre}#{file.file_id}" for file in files
     if settings["button"]:
         btn = [
             [
