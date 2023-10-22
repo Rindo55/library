@@ -1420,9 +1420,9 @@ async def auto_filter(client, msg, spoll=False):
             **locals()
         )
     for file in files:
-        segs = f"🔖{get_size(file.file_size)}🔮{file.file_name} - {file.file_id}" 
+        segs = [f"[🔖{get_size(file.file_size)} 🔮{file.file_name}](https://t.me/anime_data_bot?start=file_{file.file_id})" for file in files] 
     else:
-        cap = f"👋 𝖧𝖾𝗒 {message.from_user.mention}\n📁 𝖸𝗈𝗎𝗋 𝖥𝗂𝗅𝖾𝗌 𝖠𝗋𝖾 𝖱𝖾𝖺𝖽𝗒\n\n♨️ 𝖯𝗈𝗐𝖾𝗋𝖾𝖽b\n{segs}"
+        cap = f"👋 𝖧𝖾𝗒 {message.from_user.mention}\n📁 𝖸𝗈𝗎𝗋 𝖥𝗂𝗅𝖾𝗌 𝖠𝗋𝖾 𝖱𝖾𝖺𝖽𝗒\n\n{segs}"
     if imdb and imdb.get('poster'):
         try:
             hehe = await message.reply_photo(photo=imdb.get('poster'), caption=f"{cap[:1024]}\n{segs}", reply_markup=InlineKeyboardMarkup(btn))
