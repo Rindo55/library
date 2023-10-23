@@ -41,7 +41,7 @@ def extract_title(filename):
         return matches[0]
     return None
 
-async def get_eng_data(capx):
+async def get_eng_data(anime_title):
     malurl = f"https://api.jikan.moe/v4/anime?q={capx}"
     malresponse = requests.get(malurl)
     maldata = malresponse.json()
@@ -49,7 +49,7 @@ async def get_eng_data(capx):
     damn = mal['title_english']
     return damn
     
-async def get_jap_data(capx):
+async def get_jap_data(anime_title):
     malurl = f"https://api.jikan.moe/v4/anime?q={capx}"
     malresponse = requests.get(malurl)
     maldata = malresponse.json()
@@ -75,9 +75,11 @@ async def save_file(media):
     file_id, file_ref = unpack_new_file_id(media.file_id)
     file_name = str(media.file_name)
     anime_title = extract_title(file_name)
+    print("ani titile", anime_title)
     engcap = await get_eng_data(anime_title)
     japcap = await get_jap_data(anime_title)
-    syncap = await get_syn_data(anime_title)
+    print("eng:", engcap)
+    print("jap:", japcap)
     try:
         file = Media(
             file_id=file_id,
@@ -86,7 +88,7 @@ async def save_file(media):
             file_size=media.file_size,
             file_type=media.file_type,
             mime_type=media.mime_type,
-            caption=f"{engcap}\n{japcap}\n{syncap}",
+            caption=f"{engcap} {japcap}",
         )
     except ValidationError:
         logger.exception('Error occurred while saving file in database')
