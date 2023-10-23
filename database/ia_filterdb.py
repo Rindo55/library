@@ -91,9 +91,9 @@ async def get_search_results(chat_id, query, file_type=None, max_results=10, off
     if not query:
         raw_pattern = '.'
     elif ' ' not in query:
-        raw_pattern = r'(\b|[\.\+\-_])' + query + r'(\b|[\.\+\-_])'
+        raw_pattern = query
     else:
-        raw_pattern = query.replace(' ', r'.*[\s\.\+\-_]')
+        raw_pattern = query
     
     try:
         regex = re.compile(raw_pattern, flags=re.IGNORECASE)
@@ -101,10 +101,11 @@ async def get_search_results(chat_id, query, file_type=None, max_results=10, off
         return []
 
     if USE_CAPTION_FILTER:
-        filter = {'$or': [{'file_name': query}, {'caption': query}]}
+        filter = {'$or': [{'file_name': regex}, {'caption': regex}]}
+        print("regex - ", regex)
     else:
-        filter = {'file_name': query}
-
+        filter = {'file_name': regex}
+        print("regex - ", regex)
     if file_type:
         filter['file_type'] = file_type
 
