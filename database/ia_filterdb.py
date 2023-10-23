@@ -78,10 +78,8 @@ async def save_file(media):
     print("ani titile", anime_title)
     engcap = await get_eng_data(anime_title)
     japcap = await get_jap_data(anime_title)
-    syncap = await get_syn_data(anime_title)
     print("eng:", engcap)
     print("jap:", japcap)
-    print("syn:", syncap)
     try:
         file = Media(
             file_id=file_id,
@@ -90,7 +88,7 @@ async def save_file(media):
             file_size=media.file_size,
             file_type=media.file_type,
             mime_type=media.mime_type,
-            caption=f"{engcap}\n{japcap}\n{syncap}",
+            caption=f"{engcap}\n{japcap}",
         )
     except ValidationError:
         logger.exception('Error occurred while saving file in database')
