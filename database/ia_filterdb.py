@@ -35,12 +35,17 @@ class Media(Document):
         collection_name = COLLECTION_NAME
 
 def extract_title(filename):
-    pattern = r"\(\d+\)\s(.+?)\s\["  # Updated pattern to stop at "[" character
-    matches = re.findall(pattern, filename)
-    if matches:
-        return matches[0]
-    return None
-
+    pattern =  r'\((\d+)\)\s(.+?)\s\[(.+?)\]\s@(.+)'  # Updated pattern to stop at "[" character
+    match = re.match(pattern, filename)
+    if match:
+        episode_number = match.group(1)
+        anime_title = match.group(2)
+        resolution = match.group(3)
+        group_name = match.group(4)
+        return episode_number, anime_title, resolution, group_name
+    else:
+        print("No match found.")
+    
 async def get_eng_data(anime_title):
     malurl = f"https://api.jikan.moe/v4/anime?q={anime_title}"
     malresponse = requests.get(malurl)
