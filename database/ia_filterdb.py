@@ -101,9 +101,9 @@ async def get_search_results(chat_id, query, file_type=None, max_results=10, off
         return []
 
     if USE_CAPTION_FILTER:
-        filter = {'$or': [{'file_name': regex}, {'caption': regex}]}
+        filter = {'$or': [{'file_name': query}, {'caption': query}]}
     else:
-        filter = {'file_name': regex}
+        filter = {'file_name': query}
 
     if file_type:
         filter['file_type'] = file_type
