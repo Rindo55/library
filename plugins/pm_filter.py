@@ -100,29 +100,11 @@ async def next_page(bot, query):
     pre = 'filep' if settings['file_secure'] else 'file'
     temp.FILES_IDS[key] = files
     if settings['button']:
-        btn = [
-            [
-                InlineKeyboardButton(
-                   text=f"🔖{get_size(file.file_size)}🔮{file.file_name}", callback_data=f'{pre}#{file.file_id}'
-                ),
-            ]
-            for file in files
-        ]
+        btn = []
         segs = [f"[🔖{get_size(file.file_size)} --- {file.file_name}](https://t.me/anime_data_bot?start=file_{file.file_id})" for file in files]
         segs1 = "\n\n".join(segs)
     else:
-        btn = [
-            [
-                InlineKeyboardButton(
-                    text=f"{file.file_name}", callback_data=f'{pre}#{file.file_id}'
-                ),
-                InlineKeyboardButton(
-                    text=f"{get_size(file.file_size)}",
-                    callback_data=f'{pre}#{file.file_id}',
-                ),
-            ]
-            for file in files
-        ]
+        btn = []
     try:
         if settings['auto_delete']:
             btn.insert(0, 
@@ -1300,30 +1282,11 @@ async def auto_filter(client, msg, spoll=False):
     req = message.from_user.id if message.from_user else 0
     BUTTONS[key] = search
     if settings["button"]:
-        btn = [
-            [
-                InlineKeyboardButton(
-                    text=f"{get_size(file.file_size)}🔮{file.file_name}", callback_data=f'{pre}#{file.file_id}'
-                ),
-            ]
-            for file in files
-        ]
+        btn = []
         segs = [f"[🔖{get_size(file.file_size)} - {file.file_name}](https://t.me/anime_data_bot?start=file_{file.file_id})" for file in files]
         segs1 = "\n\n".join(segs)
     else:
-        btn = [
-            [
-                InlineKeyboardButton(
-                    text=f"{file.file_name}",
-                    callback_data=f'{pre}#{file.file_id}',
-                ),
-                InlineKeyboardButton(
-                    text=f"{get_size(file.file_size)}",
-                    callback_data=f'{pre}#{file.file_id}',
-                ),
-            ]
-            for file in files
-        ]
+        btn = []
 
     try:
         if settings['auto_delete']:
