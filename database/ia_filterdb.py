@@ -32,13 +32,50 @@ class Media(Document):
         indexes = ('$file_name', )
         collection_name = COLLECTION_NAME
 
+def extract_title(filename):
+    pattern = r"\(\d+\)\s(.+?)\s\["  # Updated pattern to stop at "[" character
+    matches = re.findall(pattern, filename)
+    if matches:
+        return matches[0]
+    return None
 
+async def get_eng_data(capx):
+    malurl = f"https://api.jikan.moe/v4/anime?q={capx}"
+    malresponse = requests.get(malurl)
+    maldata = malresponse.json()
+    mal = maldata["data"][0]
+    damn = mal['title_english']
+    return damn
+    
+async def get_jap_data(capx):
+    malurl = f"https://api.jikan.moe/v4/anime?q={capx}"
+    malresponse = requests.get(malurl)
+    maldata = malresponse.json()
+    mal = maldata["data"][0]
+    damnx = mal['title']
+    return damnx
+    
+async def get_syn_data(capx):
+    malurl = f"https://api.jikan.moe/v4/anime?q={capx}"
+    malresponse = requests.get(malurl)
+    maldata = malresponse.json()
+    mal = maldata["data"][0]
+    synonyms = []
+    for i in mal['title_synonyms']:
+        synonyms.append(i["name"])
+        synonyms = ", ".join(synonyms)
+    return synonyms
+    
 async def save_file(media):
     """Save file in database"""
 
     # TODO: Find better way to get same file_id for same media to avoid duplicates
     file_id, file_ref = unpack_new_file_id(media.file_id)
     file_name = str(media.file_name)
+    anime_title = extract_title(file_name)
+    engcap = await get_eng_data(anime_title)
+    japcap = await get_jap_data(anime_title)
+    syncap = await get_syn_data(anime_title)
     try:
         file = Media(
             file_id=file_id,
@@ -47,7 +84,7 @@ async def save_file(media):
             file_size=media.file_size,
             file_type=media.file_type,
             mime_type=media.mime_type,
-            caption=media.caption.html if media.caption else None,
+            caption=f"{engcap}\n{japcap}\n{syncap}",
         )
     except ValidationError:
         logger.exception('Error occurred while saving file in database')
