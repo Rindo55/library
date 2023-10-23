@@ -2,6 +2,8 @@ import logging
 from struct import pack
 import re
 import base64
+import aiohttp
+import requests
 from pyrogram.file_id import FileId
 from pymongo.errors import DuplicateKeyError
 from umongo import Instance, Document, fields
