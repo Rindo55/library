@@ -101,7 +101,7 @@ async def next_page(bot, query):
     temp.FILES_IDS[key] = files
     if settings['button']:
         btn = []
-        segs = [f"[🔖{get_size(file.file_size)} - {file.file_name}]((https://t.me/anime_data_bot?start=file_{file.file_id}))\n({file.caption}.split("\n")[0])" for file in files]
+        segs = [f"[🔖{get_size(file.file_size)} - {file.file_name}]((https://t.me/anime_data_bot?start=file_{file.file_id}))\n(({file.caption}).splitlines()[0])" for file in files]
         segs1 = "\n\n".join(segs)
     else:
         btn = []
@@ -1283,7 +1283,7 @@ async def auto_filter(client, msg, spoll=False):
     BUTTONS[key] = search
     if settings["button"]:
         btn = []
-        segs = [f"[🔖{get_size(file.file_size)} - {file.file_name}]((https://t.me/anime_data_bot?start=file_{file.file_id}))\n({file.caption}.split("\n")[0])" for file in files]
+        segs = [f"[🔖{get_size(file.file_size)} - {file.file_name}]((https://t.me/anime_data_bot?start=file_{file.file_id}))\n(({file.caption}).splitlines()[0])" for file in files]
         segs1 = "\n\n".join(segs)
     else:
         btn = []
