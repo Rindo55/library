@@ -79,8 +79,10 @@ def query_status(_, message: Message):
         message.reply(f"You have {queries_left} queries left for today.")
     else:
         message.reply(f"You have {query_limit} queries left for today.")
-@Client.on_message(filters.private & ~filters.command, group=-1)
+@Client.on_message(filters.text)
 def handle_message(_, message: Message):
+    if message.text.startswith('/'):
+        return
     user_id = message.from_user.id
     query_limit = 10
 
