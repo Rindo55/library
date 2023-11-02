@@ -104,7 +104,11 @@ async def handle_message(client, message):
 
         # If limit reached, send message and return
         if queries_left <= 0:
-            await message.reply(f"You have reached today's limit of 10 queries. Your limit will be reset after {time_diff}.")
+            reset_time = timedelta(hours=24) - time_diff
+            hours, remainder = divmod(reset_time.seconds, 3600)
+            minutes, seconds = divmod(remainder, 60)
+            reset_message = f"You have reached today's limit of {query_limit} queries. Your limit will be reset after {hours} hours, {minutes} minutes, and {seconds} seconds."
+            await message.reply(reset_message)
             return
         else:
             collection.update_one(
