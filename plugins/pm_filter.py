@@ -79,7 +79,8 @@ def query_status(_, message: Message):
         message.reply(f"You have {queries_left} queries left for today.")
     else:
         message.reply(f"You have {query_limit} queries left for today.")
-@Client.on_message(filters.text)
+
+@Client.on_message(filters.private & filters.text & filters.incoming)
 def handle_message(_, message: Message):
     if message.text.startswith('/'):
         return
@@ -103,8 +104,12 @@ def handle_message(_, message: Message):
 
         # If limit reached, send message and return
         if queries_left <= 0:
-            message.reply("You have reached today's limit of 10 queries.")
+            message.reply("You have reached today's limit of 10 queries. Your limit will be reset after {time_diff}.")
             return
+        else:
+            kd = await global_filters(client, message)
+            if kd == False:
+                await auto_filter(client, message)
 
         # Update the query count and last query time
         collection.update_one(
@@ -116,11 +121,6 @@ def handle_message(_, message: Message):
         collection.insert_one(
             {'user_id': user_id, 'queries_left': query_limit - 1, 'last_query_time': datetime.now()}
         )
-@Client.on_message(filters.private & filters.text & filters.incoming)
-async def pv_filter(client, message):
-    kd = await global_filters(client, message)
-    if kd == False:
-        await auto_filter(client, message)
 
 @Client.on_callback_query(filters.regex(r"^next"))
 async def next_page(bot, query):
