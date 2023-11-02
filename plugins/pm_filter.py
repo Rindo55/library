@@ -67,7 +67,7 @@ async def give_filter(client, message):
 client = MongoClient('mongodb+srv://anidata:animehevc@cluster0.xa2h6hh.mongodb.net/?retryWrites=true&w=majority')
 db = client['telegram_bot']
 collection = db['query_limits']
-@app.on_message(filters.command(['querystatus']))
+@Client.on_message(filters.command(['querystatus']))
 def query_status(_, message: Message):
     user_id = message.from_user.id
     query_limit = 10
