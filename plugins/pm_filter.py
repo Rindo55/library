@@ -79,7 +79,7 @@ def query_status(_, message: Message):
         message.reply(f"You have {queries_left} queries left for today.")
     else:
         message.reply(f"You have {query_limit} queries left for today.")
-@Client.on_message(filters.text & ~filters.command)
+@Client.on_message(~filters.command)
 def handle_message(_, message: Message):
     user_id = message.from_user.id
     query_limit = 10
