@@ -81,7 +81,7 @@ def query_status(_, message: Message):
         message.reply(f"You have {query_limit} queries left for today.")
 
 @Client.on_message(filters.private & filters.text & filters.incoming)
-async def handle_message(_, message: Message):
+async def handle_message(client, message):
     if message.text.startswith('/'):
         return
     user_id = message.from_user.id
