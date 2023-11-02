@@ -104,17 +104,17 @@ async def handle_message(client, message):
 
         # If limit reached, send message and return
         if queries_left <= 0:
-            message.reply("You have reached today's limit of 10 queries. Your limit will be reset after {time_diff}.")
+            message.reply(f"You have reached today's limit of 10 queries. Your limit will be reset after {time_diff}.")
             return
         else:
             kd = await global_filters(client, message)
             if kd == False:
                 await auto_filter(client, message)
+                        # Update the query count and last query time
+                collection.update_one(
+                    {'user_id': user_id},
+                    {'$set': {'queries_left': queries_left - 1, 'last_query_time': datetime.now()}}
 
-        # Update the query count and last query time
-        collection.update_one(
-            {'user_id': user_id},
-            {'$set': {'queries_left': queries_left - 1, 'last_query_time': datetime.now()}}
         )
     else:
         # Create new user entry
