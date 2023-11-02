@@ -111,7 +111,7 @@ async def handle_message(client, message):
             if kd == False:
                 await auto_filter(client, message)
                         # Update the query count and last query time
-                collection.update_one(
+                await collection.update_one(
                     {'user_id': user_id},
                     {'$set': {'queries_left': queries_left - 1, 'last_query_time': datetime.now()}}
 
