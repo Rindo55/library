@@ -88,9 +88,9 @@ async def handle_message(client, message):
     query_limit = 10
 
     # Check if user entry exists in the collection
-
+    user_data = collection.find_one({'user_id': user_id})
     # If user entry exists, check if limit reached
-    if user_id in collection.find_one({'user_id': user_id}):
+    if user_data:
         queries_left = user_entry['queries_left']
         last_query_time = user_entry['last_query_time']
 
@@ -123,7 +123,9 @@ async def handle_message(client, message):
         collection.insert_one(
             {'user_id': user_id, 'queries_left': query_limit - 1, 'last_query_time': datetime.now()}
         )
-
+        kd = await global_filters(client, message)
+        if kd == False:
+            await auto_filter(client, message)
 @Client.on_callback_query(filters.regex(r"^next"))
 async def next_page(bot, query):
     ident, req, key, offset = query.data.split("_")
