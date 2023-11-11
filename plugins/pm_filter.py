@@ -88,10 +88,9 @@ async def handle_message(client, message):
     query_limit = 10
 
     # Check if user entry exists in the collection
-    user_entry = collection.find_one({'user_id': user_id})
 
     # If user entry exists, check if limit reached
-    if user_entry:
+    if user_id in collection.find_one({'user_id': user_id}):
         queries_left = user_entry['queries_left']
         last_query_time = user_entry['last_query_time']
 
