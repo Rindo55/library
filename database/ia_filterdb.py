@@ -90,6 +90,7 @@ async def save_file(media):
 
     # TODO: Find better way to get same file_id for same media to avoid duplicates
     file_id, file_ref = unpack_new_file_id(media.file_id)
+    linkid = str_to_b64(str(media.file_id))
     file_name = str(media.file_name)
     anime_title = extract_title(file_name)
     print("ani titile", anime_title)
@@ -106,6 +107,7 @@ async def save_file(media):
             file_type=media.file_type,
             mime_type=media.mime_type,
             caption=f"{engcap}\n{japcap}",
+            link_id=linkid
         )
         print(f"db fileid {file_id}")
     except ValidationError:
