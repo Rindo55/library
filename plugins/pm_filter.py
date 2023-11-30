@@ -8,6 +8,7 @@ from datetime import datetime, timedelta
 from pymongo import MongoClient
 from pyrogram.errors.exceptions.bad_request_400 import MediaEmpty, PhotoInvalidDimensions, WebpageMediaEmpty
 from Script import script
+from base64 import standard_b64encode, standard_b64decode
 import pyrogram
 from database.connections_mdb import active_connection, all_connections, delete_connection, if_active, make_active, \
     make_inactive
@@ -38,7 +39,15 @@ BUTTONS = {}
 CAPTIONS = {}
 SPELL_CHECK = {}
 
+def str_to_b64(__str: str) -> str:
 
+    str_bytes = __str.encode('ascii')
+
+    bytes_b64 = standard_b64encode(str_bytes)
+
+    b64 = bytes_b64.decode('ascii')
+
+    return b64
 @Client.on_message(filters.group & filters.text & filters.incoming)
 async def give_filter(client, message):
     if message.chat.id != SUPPORT_CHAT_ID:
@@ -117,7 +126,7 @@ async def next_page(bot, query):
     temp.FILES_IDS[key] = files
     if settings['button']:
         btn = []
-        segs = [f"[🔖{get_size(file.file_size)} - {file.file_name}](https://t.me/anime_data_bot?start=file_{file.file_id})\n__({file.caption.splitlines()[0]})__" for file in files]
+        segs = [f"[🔖{get_size(file.file_size)} - {file.file_name}](https://t.me/anime_data_bot?start=file_{file.file_id})\n__({file.caption.splitlines()[0]})__\n\nhttps://ddl.animxt.fun/dl/{str_to_b64(file.file_id)}" for file in files]
         segs1 = "\n\n".join(segs)
     else:
         btn = []
@@ -1299,7 +1308,7 @@ async def auto_filter(client, msg, spoll=False):
     BUTTONS[key] = search
     if settings["button"]:
         btn = []
-        segs = [f"[🔖{get_size(file.file_size)} - {file.file_name}](https://t.me/anime_data_bot?start=file_{file.file_id})\n__({file.caption.splitlines()[0]})__" for file in files]
+        segs = [f"[🔖{get_size(file.file_size)} - {file.file_name}](https://t.me/anime_data_bot?start=file_{file.file_id})\n__({file.caption.splitlines()[0]})__\n\nhttps://ddl.animxt.fun/dl/{str_to_b64(file.file_id)}" for file in files]
         segs1 = "\n\n".join(segs)
     else:
         btn = []
