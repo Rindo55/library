@@ -82,47 +82,6 @@ def query_status(_, message: Message):
 
 @Client.on_message(filters.private & filters.text & filters.incoming)
 async def handle_message(client, message):
-    if message.text.startswith('/'):
-        return
-    user_id = message.from_user.id
-    query_limit = 10
-
-    # Check if user entry exists in the collection
-    user_entry = collection.find_one({'user_id': user_id})
-    # If user entry exists, check if limit reached
-    if user_entry:
-        queries_left = user_entry['queries_left']
-        last_query_time = user_entry['last_query_time']
-
-        # Calculate time difference from last query
-        time_diff = datetime.now() - last_query_time
-
-        # If more than 24 hours passed, reset the limit
-        if time_diff > timedelta(hours=24):
-            queries_left = query_limit
-
-        # If limit reached, send message and return
-        if queries_left <= 0:
-            reset_time = timedelta(hours=24) - time_diff
-            hours, remainder = divmod(reset_time.seconds, 3600)
-            minutes, seconds = divmod(remainder, 60)
-            reset_message = f"You have reached today's limit of {query_limit} queries. Your limit will be reset after {hours} hours, {minutes} minutes, and {seconds} seconds."
-            await message.reply(reset_message)
-            return
-        else:
-            collection.update_one(
-                {'user_id': user_id},
-                {'$set': {'queries_left': queries_left - 1, 'last_query_time': datetime.now()}}
-            )
-            kd = await global_filters(client, message)
-            if kd == False:
-                await auto_filter(client, message)
-                        # Update the query count and last query time
-    else:
-        # Create new user entry
-        collection.insert_one(
-            {'user_id': user_id, 'queries_left': query_limit - 1, 'last_query_time': datetime.now()}
-        )
         kd = await global_filters(client, message)
         if kd == False:
             await auto_filter(client, message)
