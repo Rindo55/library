@@ -90,6 +90,7 @@ async def save_file(media):
 
     # TODO: Find better way to get same file_id for same media to avoid duplicates
     file_id, file_ref = unpack_new_file_id(media.file_id)
+    print(media.file_id)
     linkid = str_to_b64(str(media.file_id))
     file_name = str(media.file_name)
     anime_title = extract_title(file_name)
