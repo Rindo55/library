@@ -19,7 +19,18 @@ logger.setLevel(logging.INFO)
 client = AsyncIOMotorClient(DATABASE_URI)
 db = client[DATABASE_NAME]
 instance = Instance.from_db(db)
+def b64_to_str(b64: str) -> str:
+    bytes_b64 = b64.encode('ascii')
+    bytes_str = standard_b64decode(bytes_b64)
+    __str = bytes_str.decode('ascii')
+    return __str
 
+def str_to_b64(__str: str) -> str:
+    str_bytes = __str.encode('ascii')
+    bytes_b64 = standard_b64encode(str_bytes)
+    b64 = bytes_b64.decode('ascii')
+
+    return b64
 @instance.register
 class Media(Document):
     file_id = fields.StrField(attribute='_id')
@@ -78,6 +89,7 @@ async def save_file(media):
 
     # TODO: Find better way to get same file_id for same media to avoid duplicates
     file_id, file_ref = unpack_new_file_id(media.file_id)
+    linkid = str(file_id)
     file_name = str(media.file_name)
     anime_title = extract_title(file_name)
     print("ani titile", anime_title)
@@ -94,6 +106,7 @@ async def save_file(media):
             file_type=media.file_type,
             mime_type=media.mime_type,
             caption=f"{engcap}\n{japcap}",
+            link_id = str_to_b64(linkid)
         )
     except ValidationError:
         logger.exception('Error occurred while saving file in database')
