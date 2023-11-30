@@ -1,7 +1,7 @@
 import logging
 from struct import pack
 import re
-import base64
+from base64 import standard_b64encode, standard_b64decode
 import aiohttp
 import requests
 from pyrogram.file_id import FileId
