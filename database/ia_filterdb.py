@@ -1,6 +1,7 @@
 import logging
 from struct import pack
 import re
+import base64
 from base64 import standard_b64encode, standard_b64decode
 import aiohttp
 import requests
@@ -106,6 +107,7 @@ async def save_file(media):
             mime_type=media.mime_type,
             caption=f"{engcap}\n{japcap}",
         )
+        print(f"db fileid {file_id}")
     except ValidationError:
         logger.exception('Error occurred while saving file in database')
         return False, 2
